@@ -1,16 +1,16 @@
 <template>
   <div class="home">
-    <Comp/>
+    <Cartbody/>
    </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Comp from "@/components/Comp"
+import Cartbody from '../components/Cartbody.vue';
 export default {
   name: "Home",
   components: {
-    Comp,
+    Cartbody,
   
   },
 };
