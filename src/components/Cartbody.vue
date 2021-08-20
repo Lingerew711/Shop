@@ -25,6 +25,7 @@
         <button
           class="btn btn-outline-primary float-right ml-2"
           title="details"
+          @click="update_prop(input.node)"
           type="button"
           data-bs-toggle="modal"
           data-bs-target="#staticBackdrop"
@@ -41,84 +42,39 @@
       </div>
     </div>
     <!-- Modal -->
-    <div
-      v-for="input in directory.edges"
-      :key="input.id"
-      class="modal hide"
-      id="staticBackdrop"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="staticBackdropLabel">
-              {{ input.node.productId.productName }}
-            </h5>
-            <button
-              type="button"
-              class="btn btn-outline-primary float-right ml-1"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            >
-              <i class="fa fa-close"></i>
-            </button>
-          </div>
-          <div class="modal-body">
-            <img
-              class="card-img-top"
-              src="@/assets/images/sho.jpg"
-              alt="Card image cap"
-            />
-            <p class="card-text">
-              <Strong>Brand: </Strong>{{ input.node.productId.brand }} <br />
-              <Strong>Price: </Strong
-              ><span
-                >{{ input.node.productId.price - input.node.productId.discount * 100 }} ETB</span
-              >&nbsp;&nbsp;&nbsp;
-              <span class="old-price">{{ input.node.productId.price }} ETB</span> <br />
-              <Strong>Date: </Strong>{{ input.node.productId.date }}<br />
-              <Strong>Description: </Strong>{{ input.node.productId.description }}<br />
-              <Strong>Category: </Strong>{{ input.node.productId.category }}<br />
-              <Strong>Status: </Strong>{{ input.node.productId.condition }}&nbsp;&nbsp;
-              <Strong>Is Availbale?: </Strong
-              >{{ input.node.productId.deliveryAvailable }}&nbsp;&nbsp;
-              <Strong>Amount: </Strong>{{ input.node.productId.productCount }}
-            </p>
-            <button
-              href="#"
-              class="btn btn-outline-primary float-right"
-              title="add to cart"
-            >
-              <i class="fa fa-shopping-cart"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+     <CarModal :input="item" />
+    
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import CarModal from "@/components/CarModal.vue";
 import Search from "@/components/Search.vue";
 export default {
-  name: "CompanyData",
+  name: "Cartbody",
   components: {
     Search,
+    CarModal,
   },
   props: {
     Text: String,
   },
   data() {
     return {
+      wishlist: '',
       directory: [],
-    };
+      productId: {
+        productName: '',
+      }    
+      
+      };
   },
-
+computed: {
+    item() {
+      return this.wishlist;
+    },
+  },
   async mounted() {
     try {
       var result = await axios({
@@ -157,6 +113,10 @@ export default {
       console.error(error);
     }
   },
+  methods: {
+    update_prop(item) {
+      this.wishlist = item;
+    },}
 };
 </script>
 
