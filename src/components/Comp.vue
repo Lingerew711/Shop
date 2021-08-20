@@ -1,45 +1,11 @@
 <template>
   <div>
     <Search />
-<form>
-      <label>Id</label>
-      <input type="number" name="wishlistId" v-model="wishlistId"/>
-      <br />
-
+<form style="display: none">
       <label>Product Id</label>
       <input type="number"  name="productId" v-model="productId"/>
       <br />
 </form>
-
-
-<!-- <div class="form-group">
-    <label class="control-label col-md-3 col-sm-3 col-xs-12">Input 1:</label>
-    <div class="col-md-9 col-sm-9 col-xs-12">
-        <input type="text" name="vorspeise-traditionell-montag" class="form-control vorspeise" value="<?php echo $yy ?>" required>
-    </div>
-</div>
-<a class="btn btn-warning" href="#" @Click="autoFill('Suppenbuffet'); return false;" role="button">Suppenbuffet</a> -->
-<!-- <a href="#" @Click="autoFill();" >Click to Autofill</a>
-<form>
-  <p>
-    <label>Text Input: </label>
-    <input type="text" id="input1">
-  </p>
-  <p>
-    <label>Dropdown Input: </label>
-    <select id="input2">
-      <option value="Dropdown1">First Option</option>
-      <option value="Dropdown2">Second Option</option>
-      <option value="Dropdown3">Third Option</option>
-    </select>
-  </p>
-  <p>
-    <label>Radio Input: </label>
-       <input type="radio" name="input3" value="Radio1">First Radio
-       <input type="radio" name="input3" value="Radio2">Second Radio
-       <input type="radio" name="input3" value="Radio3">Third Radio
-  </p>
-</form> -->
 
     <Modal :input="item" />
     <div
@@ -74,7 +40,7 @@
           <i class="fa fa-eye"></i>
         </button>
         <button
-          @click="createWishlist()"
+          @click="createWishlist(input.node.productId)"
           type="button"
           class="btn btn-outline-primary float-right"
           title="add to cart"
@@ -137,11 +103,10 @@ import Modal from "@/components/Modal.vue";
 //   }
 // `;
 const ADD_TO_CART = gql`
-  mutation ($wishlistId: Int!, $productId: Int!) {
-    createWishlist(input: { wishlistId: $wishlistId, productId: $productId }) {
+  mutation ($productId: Int!) {
+    createWishlist(input: {productId: $productId }) {
       wishlist {
         id
-        wishlistId
         productId {
           productName
         }
@@ -278,14 +243,13 @@ export default {
     //   });
     //   // location.reload();
     // },
-    async createWishlist() {
-      const wishlistId = parseFloat(this.wishlistId);
-      const productId = parseFloat(this.productId);
+    async createWishlist(productId) {
+ 
+      productId = parseFloat(productId);
       console.log( productId)
       this.$apollo.mutate({
         mutation: ADD_TO_CART,
         variables: {
-          wishlistId:wishlistId,
           productId:productId
         },
       });
