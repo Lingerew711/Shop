@@ -16,6 +16,7 @@
         <h5 class="card-title">{{ input.node.productId.productName }}</h5>
         <p class="card-text">
           <Strong>Brand: </Strong>{{ input.node.productId.brand }} <br />
+          <Strong>Brand: </Strong>{{ input.node.productId.productId }} <br />
           <Strong>Price: </Strong
           ><span>{{ input.node.productId.price - input.node.productId.discount * 100 }} ETB</span
           >&nbsp;&nbsp;&nbsp;
@@ -33,6 +34,7 @@
           <i class="fa fa-eye"></i>
         </button>
         <button
+         @click="deleteWishlist(input.node.productId.productId)"
           href="#"
           class="btn btn-outline-primary float-right"
           title="add to cart"
@@ -49,8 +51,21 @@
 
 <script>
 import axios from "axios";
+import gql from "graphql-tag";
 import CarModal from "@/components/CarModal.vue";
 import Search from "@/components/Search.vue";
+const DELETE_CART = gql`
+  mutation ($productId: Int!) {
+    deleteWishlist(input: {productId: $productId }) {
+      wishlist {
+        id
+        productId {
+          productName
+        }
+      }
+    }
+  }
+`;
 export default {
   name: "Cartbody",
   components: {
@@ -63,10 +78,7 @@ export default {
   data() {
     return {
       wishlist: '',
-      directory: [],
-      productId: {
-        productName: '',
-      }    
+      directory: [],   
       
       };
   },
@@ -116,7 +128,20 @@ computed: {
   methods: {
     update_prop(item) {
       this.wishlist = item;
-    },}
+    },
+    async deleteWishlist(productId) {
+      productId = parseFloat(productId);
+      console.log( productId)
+      this.$apollo.mutate({
+        mutation: DELETE_CART,
+        variables: {
+          productId:productId
+        },
+      });
+    },
+    
+    
+    }
 };
 </script>
 

@@ -1,12 +1,6 @@
 <template>
   <div>
     <Search />
-<form style="display: none">
-      <label>Product Id</label>
-      <input type="number"  name="productId" v-model="productId"/>
-      <br />
-</form>
-
     <Modal :input="item" />
     <div
       class="card m-3"

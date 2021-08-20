@@ -2,6 +2,7 @@
   <div>
     <div
       class="modal hide"
+      v-if="input"
       id="staticBackdrop"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
@@ -69,9 +70,6 @@ export default {
   data() {
     return {
       directory: [],
-      productId:{
-          productName: '',
-        }
     };
   },
 
